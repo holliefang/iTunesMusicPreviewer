@@ -9,17 +9,30 @@ import Foundation
 
 class SearchViewModel {
     
-    var tracks: [Track] = [] {
+    private var tracks: [Track] = [] {
         didSet {
             tracksDidUpdate?()
         }
     }
     
+    private let networkService = NetworkService.shared
     var tracksDidUpdate: (() -> ())?
     var emptyTrackDidUpdate: (() -> ())?
     
+    var numberOfRows: Int {
+        return tracks.count
+    }
+    
+    func track(at indexPath: IndexPath) -> Track {
+        return tracks[indexPath.row]
+    }
+    
     func getTracks(keyword: String) {
-        NetworkService().getTracks(keywords: keyword) { tracks in
+        networkService.getTracks(keyword: keyword) { success, tracks in
+            guard success else {
+                //MARK: handle error here
+                return
+            }
             self.tracks = tracks
             if tracks.isEmpty {
                 self.emptyTrackDidUpdate?()

@@ -18,6 +18,10 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViewModels()
+    }
+    
+    private func bindViewModels() {
         viewModel.tracksDidUpdate = { [weak self] in
             guard let self = self else {
                 return
@@ -60,19 +64,19 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.tracks.count
+        return viewModel.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TrackCell.reuseID, for: indexPath) as! TrackCell
-        cell.set(viewModel.tracks[indexPath.row])
+        cell.set(viewModel.track(at: indexPath))
         return cell
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        playDownload(viewModel.tracks[indexPath.row])
+        playDownload(viewModel.track(at: indexPath))
     }
 }
 
