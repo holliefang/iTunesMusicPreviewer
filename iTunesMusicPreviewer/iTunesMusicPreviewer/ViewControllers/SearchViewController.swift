@@ -19,6 +19,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModels()
+        print("hello~")
     }
     
     private func bindViewModels() {
